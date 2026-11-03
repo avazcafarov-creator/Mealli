@@ -1,21 +1,21 @@
 //
-//  UIViewController+Gradient.swift
+//  BaseOnboardingControllerViewController.swift
 //  Mealli
 //
 //  Created by Avaz Cafarov on 27.10.26.
 //
 
-import Foundation
 import UIKit
 
-extension UIViewController {
-    func addGradientBackground() {
-        guard !view.subviews.contains(where: {
-            $0 is GradientView
-        }) else {
-            return
-        }
-        
+class BaseOnboardingController: UIViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        setupGradientBackground()
+    }
+    
+    func setupGradientBackground() {
         let gradientView = GradientView()
         gradientView.translatesAutoresizingMaskIntoConstraints = false
         gradientView.isUserInteractionEnabled = false

@@ -25,7 +25,5 @@ class ViewController: UIViewController {
             titleLabel.font = roundedFont
         }
     }
-
-
 }
 

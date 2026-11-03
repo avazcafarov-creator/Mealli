@@ -27,14 +27,9 @@ final class GradientView: UIView {
     }
     
     private func setupGradient() {
-        let startColor = UIColor(named: "brand_lime_soft")
-        let endColor = UIColor(named: "surface")
-        
-        gradientLayer.colors = [startColor!.cgColor, endColor!.cgColor]
-        
+        gradientLayer.colors = [ UIColor.brandLimeSoft.cgColor, UIColor.surface.cgColor ]
         gradientLayer.startPoint = CGPoint(x: 0.5, y: 0)
         gradientLayer.endPoint = CGPoint(x: 0.5, y: 1)
-        
         gradientLayer.locations = [0, 0.62]
     }
 }
