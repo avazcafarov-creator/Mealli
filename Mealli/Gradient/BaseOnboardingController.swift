@@ -11,7 +11,6 @@ class BaseOnboardingController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         setupGradientBackground()
     }
     
@@ -28,5 +27,9 @@ class BaseOnboardingController: UIViewController {
             gradientView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             gradientView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+    
+    func pushNext() {
+        (navigationController as? OnboardingNavigationController)?.pushNextStep()
     }
 }

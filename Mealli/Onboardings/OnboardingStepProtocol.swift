@@ -9,6 +9,5 @@ import Foundation
 import UIKit
 
 protocol OnboardingStep: UIViewController {
-    var stepIndex: Int { get }
     var stepTitle: String { get }
 }

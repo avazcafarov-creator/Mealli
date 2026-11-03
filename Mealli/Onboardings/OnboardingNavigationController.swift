@@ -45,9 +45,16 @@ final class OnboardingNavigationController: UINavigationController {
         viewController.additionalSafeAreaInsets.top = height
     }
     
+    func pushNextStep() {
+        let nextIndex = viewControllers.count
+        guard nextIndex < OnboardingFlow.screens.count else { return }
+        pushViewController(OnboardingFlow.screens[nextIndex](), animated: true)
+    }
+    
     private func updateHeader(for viewController: UIViewController) {
-        guard let step = viewController as? OnboardingStep else { return }
-        header.update(current: step.stepIndex, title: step.stepTitle)
+        guard let step = viewController as? OnboardingStep,
+        let index = viewControllers.firstIndex(of: viewController) else { return }
+        header.update(current: index + 1, title: step.stepTitle)
     }
 }
 
@@ -55,6 +62,8 @@ extension OnboardingNavigationController: UINavigationControllerDelegate {
     func navigationController(_ navigationController: UINavigationController,
                               willShow viewController: UIViewController,
                               animated: Bool) {
+        applyHeaderInset(to: viewController)
+        updateHeader(for: viewController)
         guard let coordinator = transitionCoordinator, coordinator.isInteractive else { return }
         coordinator.notifyWhenInteractionChanges { [weak self] context in
             guard context.isCancelled,

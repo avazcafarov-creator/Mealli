@@ -8,13 +8,27 @@
 import UIKit
 
 final class OnboardingNavigationView: UIView {
-    private let titleLabel = UILabel()
-    private let countLabel = UILabel()
     private let segmentsStack = UIStackView()
     private var segments: [UIView] = []
     private let backButton = UIButton(type: .system)
     var onBack: (() -> Void)?
     private let totalSteps = 15
+    
+    private lazy var titleLabel: UILabel = {
+        let tL = UILabel()
+        tL.applyStyle(.h3)
+        tL.textAlignment = .center
+        tL.translatesAutoresizingMaskIntoConstraints = false
+        return tL
+    }()
+    
+    private lazy var countLabel: UILabel = {
+        let cL = UILabel()
+        cL.applyStyle(.caption)
+        cL.textAlignment = .right
+        cL.translatesAutoresizingMaskIntoConstraints = false
+        return cL
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -27,17 +41,9 @@ final class OnboardingNavigationView: UIView {
     }
     
     private func configureUI() {
-        configureLabels()
         configureBackButton()
         configureSegments()
         layoutUI()
-    }
-    
-    private func configureLabels() {
-        titleLabel.applyStyle(.h3)
-        titleLabel.textAlignment = .center
-        countLabel.applyStyle(.caption)
-        countLabel.textAlignment = .right
     }
     
     private func configureBackButton() {
