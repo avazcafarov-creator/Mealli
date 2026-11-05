@@ -10,9 +10,22 @@ import UIKit
 final class OnboardingNavigationView: UIView {
     private let segmentsStack = UIStackView()
     private var segments: [UIView] = []
-    private let backButton = UIButton(type: .system)
     var onBack: (() -> Void)?
     private let totalSteps = 15
+    
+    private lazy var backButton: UIButton = {
+        let config = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "chevron.left", withConfiguration: config), for: .normal)
+        button.tintColor = .brandDeep
+        button.backgroundColor = .brandLime
+        button.widthAnchor.constraint(equalToConstant: 44).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 44).isActive = true
+        button.layer.cornerRadius = 22
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(backTapped), for: .touchUpInside)
+        return button
+    }()
     
     private lazy var titleLabel: UILabel = {
         let tL = UILabel()
@@ -41,16 +54,8 @@ final class OnboardingNavigationView: UIView {
     }
     
     private func configureUI() {
-        configureBackButton()
         configureSegments()
         layoutUI()
-    }
-    
-    private func configureBackButton() {
-        let config = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
-        backButton.setImage(UIImage(systemName: "chevron.left", withConfiguration: config), for: .normal)
-        backButton.tintColor = .ink
-        backButton.addTarget(self, action: #selector(backTapped), for: .touchUpInside)
     }
     
     @objc private func backTapped() {
