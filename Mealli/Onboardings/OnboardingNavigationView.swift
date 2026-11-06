@@ -85,7 +85,7 @@ final class OnboardingNavigationView: UIView {
 
         NSLayoutConstraint.activate([
             backButton.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            backButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+            backButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             backButton.widthAnchor.constraint(equalToConstant: 44),
             backButton.heightAnchor.constraint(equalToConstant: 44),
 
@@ -95,7 +95,7 @@ final class OnboardingNavigationView: UIView {
             countLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             countLabel.centerYAnchor.constraint(equalTo: backButton.centerYAnchor),
 
-            segmentsStack.topAnchor.constraint(equalTo: backButton.bottomAnchor, constant: 4),
+            segmentsStack.topAnchor.constraint(equalTo: backButton.bottomAnchor, constant: 12),
             segmentsStack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             segmentsStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             segmentsStack.heightAnchor.constraint(equalToConstant: 4),
@@ -106,7 +106,6 @@ final class OnboardingNavigationView: UIView {
     func update(current: Int, title: String) {
         titleLabel.text = title
         countLabel.text = "\(current)/\(totalSteps)"
-        backButton.isHidden = current <= 1
         
         UIView.animate(withDuration: 0.25){
             for (index, segment) in self.segments.enumerated() {

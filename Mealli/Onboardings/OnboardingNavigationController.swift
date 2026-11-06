@@ -16,7 +16,7 @@ final class OnboardingNavigationController: UINavigationController {
         interactivePopGestureRecognizer?.delegate = nil
         delegate = self
         configureHeader()
-    }
+    } 
     
     private func configureHeader() {
         header.translatesAutoresizingMaskIntoConstraints = false
@@ -29,7 +29,12 @@ final class OnboardingNavigationController: UINavigationController {
         ])
         
         header.onBack = { [weak self] in
-            self?.popViewController(animated: true)
+            guard let self else { return }
+            if viewControllers.count > 1 {
+                popViewController(animated: true)
+            } else {
+                dismiss(animated: true)
+            }
         }
     }
     

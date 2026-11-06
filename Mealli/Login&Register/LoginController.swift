@@ -113,7 +113,7 @@ class LoginController: BaseOnboardingController {
         
         NSLayoutConstraint.activate([
             backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
-            backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
+            backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             
             greetingStackView.topAnchor.constraint(equalTo: backButton.bottomAnchor, constant: 16),
             greetingStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),

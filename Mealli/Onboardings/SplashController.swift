@@ -131,7 +131,8 @@ class SplashController: UIViewController {
     }
     
     @objc private func startButtonTapped() {
-        let onboardingNameController = OnboardingNameController()
-        navigationController?.pushViewController(onboardingNameController, animated: true)
+        let onboardingNavigationController = OnboardingNavigationController(rootViewController: OnboardingNameController())
+        onboardingNavigationController.modalPresentationStyle = .fullScreen
+        present(onboardingNavigationController, animated: true)
     }
 }
