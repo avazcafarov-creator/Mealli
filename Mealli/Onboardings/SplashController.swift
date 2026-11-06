@@ -51,6 +51,7 @@ class SplashController: UIViewController {
         sB.heightAnchor.constraint(equalToConstant: 56).isActive = true
         sB.layer.cornerRadius = 28
         sB.translatesAutoresizingMaskIntoConstraints = false
+        sB.addTarget(self, action: #selector(startButtonTapped), for: .touchUpInside)
         return sB
     }()
     
@@ -127,5 +128,10 @@ class SplashController: UIViewController {
     @objc private func didTapAlreadyLoggedInLabel() {
         let loginController = LoginController()
         navigationController?.pushViewController(loginController, animated: true)
+    }
+    
+    @objc private func startButtonTapped() {
+        let onboardingNameController = OnboardingNameController()
+        navigationController?.pushViewController(onboardingNameController, animated: true)
     }
 }

@@ -21,6 +21,78 @@ class LoginController: BaseOnboardingController {
         button.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
         return button
     }()
+    
+    private lazy var greetingText: UILabel = {
+        let gT = UILabel()
+        gT.text = "Xoş gəlmisiniz!"
+        gT.applyStyle(.h2)
+        gT.numberOfLines = 1
+        gT.textAlignment = .center
+        gT.translatesAutoresizingMaskIntoConstraints = false
+        return gT
+    }()
+    
+    private lazy var greetingSubtitleText: UILabel = {
+        let gST = UILabel()
+        gST.text = "Hesabına daxil ol, planın səni gözləyir."
+        gST.applyStyle(.body)
+        gST.numberOfLines = 1
+        gST.textAlignment = .center
+        gST.translatesAutoresizingMaskIntoConstraints = false
+        return gST
+    }()
+    
+    private lazy var greetingStackView: UIStackView = {
+        let sV = UIStackView(arrangedSubviews: [greetingText, greetingSubtitleText])
+        sV.axis = .vertical
+        sV.spacing = 8
+        sV.alignment = .center
+        sV.translatesAutoresizingMaskIntoConstraints = false
+        return sV
+    }()
+    
+    private lazy var appleLoginButton: UIButton = {
+        var config = UIButton.Configuration.plain()
+        config.title = "Apple ilə davam et"
+        config.image = UIImage(systemName: "apple.logo", withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold))
+        config.imagePlacement = .leading
+        config.imagePadding = 8
+        config.baseForegroundColor = .white
+        config.cornerStyle = .capsule
+        
+        let aLB = UIButton(configuration: config)
+        aLB.backgroundColor = .ink
+        aLB.titleLabel?.applyStyle(.body)
+        aLB.heightAnchor.constraint(equalToConstant: 52).isActive = true
+        aLB.translatesAutoresizingMaskIntoConstraints = false
+        return aLB
+    }()
+    
+    private lazy var googleLoginButton: UIButton = {
+        var config = UIButton.Configuration.plain()
+        config.title = "Google ilə davam et"
+        config.image = UIImage(systemName: "googlelogo.circle", withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold))
+        config.imagePlacement = .leading
+        config.imagePadding = 8
+        config.baseForegroundColor = .ink
+        config.cornerStyle = .capsule
+        
+        let gLB = UIButton(configuration: config)
+        gLB.titleLabel?.applyStyle(.body)
+        gLB.heightAnchor.constraint(equalToConstant: 52).isActive = true
+        gLB.backgroundColor = .surface
+        gLB.translatesAutoresizingMaskIntoConstraints = false
+        return gLB
+    }()
+    
+    private lazy var loginStackView: UIStackView = {
+       let sV = UIStackView(arrangedSubviews: [appleLoginButton, googleLoginButton])
+        sV.axis = .vertical
+        sV.spacing = 8
+        sV.alignment = .fill
+        sV.translatesAutoresizingMaskIntoConstraints = false
+        return sV
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,10 +108,19 @@ class LoginController: BaseOnboardingController {
     
     private func configureConstraints() {
         view.addSubview(backButton)
+        view.addSubview(greetingStackView)
+        view.addSubview(loginStackView)
         
         NSLayoutConstraint.activate([
             backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
-            backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32)
+            backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
+            
+            greetingStackView.topAnchor.constraint(equalTo: backButton.bottomAnchor, constant: 16),
+            greetingStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            loginStackView.topAnchor.constraint(equalTo: greetingStackView.bottomAnchor, constant: 20),
+            loginStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loginStackView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.88)
         ])
     }
     
