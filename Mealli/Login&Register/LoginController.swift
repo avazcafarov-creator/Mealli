@@ -58,10 +58,10 @@ class LoginController: BaseOnboardingController {
         config.imagePlacement = .leading
         config.imagePadding = 8
         config.baseForegroundColor = .white
+        config.background.backgroundColor = .ink
         config.cornerStyle = .capsule
         
         let aLB = UIButton(configuration: config)
-        aLB.backgroundColor = .ink
         aLB.titleLabel?.applyStyle(.body)
         aLB.heightAnchor.constraint(equalToConstant: 52).isActive = true
         aLB.translatesAutoresizingMaskIntoConstraints = false
@@ -71,16 +71,16 @@ class LoginController: BaseOnboardingController {
     private lazy var googleLoginButton: UIButton = {
         var config = UIButton.Configuration.plain()
         config.title = "Google ilə davam et"
-        config.image = UIImage(systemName: "googlelogo.circle", withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold))
+        config.image = UIImage(named: "google_logo")
         config.imagePlacement = .leading
         config.imagePadding = 8
+        config.background.backgroundColor = .surface
         config.baseForegroundColor = .ink
         config.cornerStyle = .capsule
         
         let gLB = UIButton(configuration: config)
         gLB.titleLabel?.applyStyle(.body)
         gLB.heightAnchor.constraint(equalToConstant: 52).isActive = true
-        gLB.backgroundColor = .surface
         gLB.translatesAutoresizingMaskIntoConstraints = false
         return gLB
     }()
