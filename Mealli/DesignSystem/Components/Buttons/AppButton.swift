@@ -9,7 +9,7 @@ import UIKit
 
 final class AppButton: UIButton {
     enum Style {
-        case primary, secondary, tertiary, destructive
+        case primary, secondary, tertiary, destructive, link, accent, tertiaryOnDark
         
         var background: UIColor {
             switch self {
@@ -17,6 +17,9 @@ final class AppButton: UIButton {
             case .secondary: return .brandLimeSoft
             case .tertiary: return .clear
             case .destructive: return .dangerStrong
+            case .link: return .clear
+            case .accent: return .brandLime
+            case .tertiaryOnDark: return .clear
             }
         }
         
@@ -26,7 +29,18 @@ final class AppButton: UIButton {
             case .secondary: return .brandDeep
             case .tertiary: return .brandDeep
             case .destructive: return .white
+            case .link: return .brandDeep
+            case .accent: return .ink
+            case .tertiaryOnDark: return .surface
             }
+        }
+        
+        var isPlain: Bool {
+            self == .tertiary || self == .link || self == .tertiaryOnDark
+        }
+        
+        var isUnderlined: Bool {
+            self == .tertiary || self == .tertiaryOnDark
         }
     }
     
@@ -39,9 +53,9 @@ final class AppButton: UIButton {
     }
     
     private func configureUI(title: String) {
-        var config: UIButton.Configuration = style == .tertiary ? .plain() : .filled()
+        var config: UIButton.Configuration = style.isPlain ? .plain() : .filled()
         var attributed = AttributedString(title)
-        if style == .tertiary {
+        if style.isUnderlined {
             attributed.underlineStyle = .single
         }
         config.attributedTitle = attributed
@@ -54,13 +68,17 @@ final class AppButton: UIButton {
             return outgoing
         }
         
+        if style == .link {
+            config.contentInsets = .zero
+        }
+            
         self.configuration = config
         
         configurationUpdateHandler = { [weak self] button in
             guard let self, var config = button.configuration
             else { return }
             if !button.isEnabled {
-                config.baseBackgroundColor = self.style == .tertiary ? .clear : .ink3
+                config.baseBackgroundColor = self.style.isPlain ? .clear : .ink3
                 config.baseForegroundColor = .ink2
             } else {
                 config.baseBackgroundColor = self.style.background
@@ -71,7 +89,9 @@ final class AppButton: UIButton {
         }
         
         translatesAutoresizingMaskIntoConstraints = false
-        heightAnchor.constraint(equalToConstant: 52).isActive = true
+        if style != .link {
+            heightAnchor.constraint(equalToConstant: 52).isActive = true
+        }
     }
     
     required init?(coder: NSCoder) {

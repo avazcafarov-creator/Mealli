@@ -8,47 +8,10 @@
 import UIKit
 
 class LoginController: BaseOnboardingController {
-    private lazy var backButton: UIButton = {
-        let config = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
-        let button = UIButton()
-        button.setImage(UIImage(systemName: "chevron.left", withConfiguration: config), for: .normal)
-        button.tintColor = .brandDeep
-        button.backgroundColor = .brandLime
-        button.widthAnchor.constraint(equalToConstant: 44).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 44).isActive = true
-        button.layer.cornerRadius = 22
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+    private lazy var backButton: BackButton = {
+        let button = BackButton()
+        button.addTarget(self, action: #selector(backTapped), for: .touchUpInside)
         return button
-    }()
-    
-    private lazy var greetingText: UILabel = {
-        let gT = UILabel()
-        gT.text = "Xoş gəlmisiniz!"
-        gT.applyStyle(.h2)
-        gT.numberOfLines = 1
-        gT.textAlignment = .center
-        gT.translatesAutoresizingMaskIntoConstraints = false
-        return gT
-    }()
-    
-    private lazy var greetingSubtitleText: UILabel = {
-        let gST = UILabel()
-        gST.text = "Hesabına daxil ol, planın səni gözləyir."
-        gST.applyStyle(.body)
-        gST.numberOfLines = 1
-        gST.textAlignment = .center
-        gST.translatesAutoresizingMaskIntoConstraints = false
-        return gST
-    }()
-    
-    private lazy var greetingStackView: UIStackView = {
-        let sV = UIStackView(arrangedSubviews: [greetingText, greetingSubtitleText])
-        sV.axis = .vertical
-        sV.spacing = 8
-        sV.alignment = .center
-        sV.translatesAutoresizingMaskIntoConstraints = false
-        return sV
     }()
 
     private lazy var emailField: AppInputField = {
@@ -71,14 +34,9 @@ class LoginController: BaseOnboardingController {
         return field
     }()
     
-    private lazy var forgotPasswordButton: UIButton = {
-        let fPB = UIButton(type: .system)
-        fPB.setTitle("Şifrəni unutmusan?", for: .normal)
-        fPB.titleLabel?.font = .systemFont(ofSize: 14, weight: .semibold)
-        fPB.setTitleColor(.brandDeep, for: .normal)
+    private lazy var forgotPasswordButton: AppButton = {
+        let fPB = AppButton(style: .link, title: "Şifrəni unutmusan?")
         fPB.contentHorizontalAlignment = .trailing
-        fPB.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        fPB.translatesAutoresizingMaskIntoConstraints = false
         return fPB
     }()
     
@@ -115,12 +73,8 @@ class LoginController: BaseOnboardingController {
         return nAT
     }()
     
-    private lazy var startButton: UIButton = {
-        let sB = UIButton(type: .system)
-        sB.setTitle("Başla", for: .normal)
-        sB.titleLabel?.font = AppTextStyle.h3.font
-        sB.setTitleColor(.brandDeep, for: .normal)
-        sB.translatesAutoresizingMaskIntoConstraints = false
+    private lazy var startButton: AppButton = {
+        let sB = AppButton(style: .link, title: "Başla")
         sB.addTarget(self, action: #selector(startButtonTapped), for: .touchUpInside)
         return sB
     }()
@@ -155,6 +109,11 @@ class LoginController: BaseOnboardingController {
     private let dividerView = OrDividerView()
     private let appleLoginButton = SocialButton(provider: .apple)
     private let googleLoginButton = SocialButton(provider: .google)
+    
+    private let headerView = ScreenHeaderView(
+        title: "Xoş gəlmisiniz!",
+        subtitle: "Hesabına daxil ol, planın səni gözləyir."
+    )
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -170,7 +129,7 @@ class LoginController: BaseOnboardingController {
     
     private func configureConstraints() {
         view.addSubview(backButton)
-        view.addSubview(greetingStackView)
+        view.addSubview(headerView)
         view.addSubview(loginStackView)
         view.addSubview(dividerView)
         view.addSubview(formStackView)
@@ -180,10 +139,11 @@ class LoginController: BaseOnboardingController {
             backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
             backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             
-            greetingStackView.topAnchor.constraint(equalTo: backButton.bottomAnchor, constant: 16),
-            greetingStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            headerView.topAnchor.constraint(equalTo: backButton.bottomAnchor, constant: 16),
+            headerView.leadingAnchor.constraint(equalTo: loginStackView.leadingAnchor),
+            headerView.trailingAnchor.constraint(equalTo: loginStackView.trailingAnchor),
             
-            loginStackView.topAnchor.constraint(equalTo: greetingStackView.bottomAnchor, constant: 16),
+            loginStackView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 16),
             loginStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             loginStackView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.88),
             
@@ -216,7 +176,7 @@ class LoginController: BaseOnboardingController {
         present(onboardingNavigationController, animated: true)
     }
     
-    @objc private func backButtonTapped() {
+    @objc private func backTapped() {
         navigationController?.popViewController(animated: true)
     }
 }

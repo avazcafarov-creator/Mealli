@@ -13,16 +13,8 @@ final class OnboardingNavigationView: UIView {
     var onBack: (() -> Void)?
     private let totalSteps = 15
     
-    private lazy var backButton: UIButton = {
-        let config = UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold)
-        let button = UIButton()
-        button.setImage(UIImage(systemName: "chevron.left", withConfiguration: config), for: .normal)
-        button.tintColor = .brandDeep
-        button.backgroundColor = .brandLime
-        button.widthAnchor.constraint(equalToConstant: 44).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 44).isActive = true
-        button.layer.cornerRadius = 22
-        button.translatesAutoresizingMaskIntoConstraints = false
+    private lazy var backButton: BackButton = {
+        let button = BackButton()
         button.addTarget(self, action: #selector(backTapped), for: .touchUpInside)
         return button
     }()
@@ -86,8 +78,6 @@ final class OnboardingNavigationView: UIView {
         NSLayoutConstraint.activate([
             backButton.topAnchor.constraint(equalTo: topAnchor, constant: 8),
             backButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            backButton.widthAnchor.constraint(equalToConstant: 44),
-            backButton.heightAnchor.constraint(equalToConstant: 44),
 
             titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             titleLabel.centerYAnchor.constraint(equalTo: backButton.centerYAnchor),

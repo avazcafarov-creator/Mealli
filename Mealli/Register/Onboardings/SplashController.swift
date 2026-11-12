@@ -42,35 +42,14 @@ class SplashController: UIViewController {
         return sV
     }()
     
-    private lazy var startButton: UIButton = {
-        let sB = UIButton(type: .system)
-        sB.setTitle("Başla", for: .normal)
-        sB.titleLabel?.applyStyle(.h3)
-        sB.setTitleColor(UIColor(named: "ink"), for: .normal)
-        sB.backgroundColor = .brandLime
-        sB.heightAnchor.constraint(equalToConstant: 56).isActive = true
-        sB.layer.cornerRadius = 28
-        sB.translatesAutoresizingMaskIntoConstraints = false
+    private lazy var startButton: AppButton = {
+        let sB = AppButton(style: .accent, title: "Başla")
         sB.addTarget(self, action: #selector(startButtonTapped), for: .touchUpInside)
         return sB
     }()
     
-    private lazy var alreadyLoggedInButton: UIButton = {
-        let aLL = UIButton(type: .system)
-        let style = AppTextStyle.h3
-        let title = NSAttributedString(
-            string: "Artıq hesabım var",
-            attributes: [
-                .font: style.font,
-                .foregroundColor: UIColor.surface,
-                .underlineStyle: NSUnderlineStyle.single.rawValue,
-                .underlineColor: UIColor.surface
-            ]
-        )
-        aLL.setAttributedTitle(title, for: .normal)
-        aLL.titleLabel?.textAlignment = .center
-        aLL.translatesAutoresizingMaskIntoConstraints = false
-        
+    private lazy var alreadyLoggedInButton: AppButton = {
+        let aLL = AppButton(style: .tertiaryOnDark, title: "Artıq hesabım var")
         aLL.addTarget(self, action: #selector(didTapAlreadyLoggedInLabel), for: .touchUpInside)
         return aLL
     }()
