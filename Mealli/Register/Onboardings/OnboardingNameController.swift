@@ -9,16 +9,26 @@ import UIKit
 
 class OnboardingNameController: BaseOnboardingController, OnboardingStep {
     var stepTitle: String { "Adın" }
-    private lazy var continueButton: UIButton = {
-        let cB = UIButton(type: .system)
-        cB.setTitle("Davam et", for: .normal)
-        cB.titleLabel?.font = AppTextStyle.h3.font
-        cB.setTitleColor(.surface, for: .normal)
-        cB.backgroundColor = .ink
-        cB.layer.cornerRadius = 16
-        cB.translatesAutoresizingMaskIntoConstraints = false
+    
+    private lazy var continueButton: AppButton = {
+        let cB = AppButton(style: .primary, title: "Davam et")
         cB.addTarget(self, action: #selector(continueTapped), for: .touchUpInside)
         return cB
+    }()
+    
+    private lazy var haveAccountButton: AppButton = {
+        let button = AppButton(style: .tertiary, title: "Artıq hesabım var")
+        button.addTarget(self, action: #selector(haveAccountTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var bottomStackView: UIStackView = {
+        let sV = UIStackView(arrangedSubviews: [continueButton, haveAccountButton])
+        sV.axis = .vertical
+        sV.spacing = 4
+        sV.alignment = .fill
+        sV.translatesAutoresizingMaskIntoConstraints = false
+        return sV
     }()
     
     private lazy var greetingText: UILabel = {
@@ -66,37 +76,50 @@ class OnboardingNameController: BaseOnboardingController, OnboardingStep {
     }
     
     private func configureUI() {
-        
+        continueButton.isEnabled = false
+        textField.addTarget(self, action: #selector(nameChanged), for: .editingChanged)
     }
     
     private func configureConstraints() {
-        view.addSubview(continueButton)
+        view.addSubview(bottomStackView)
         view.addSubview(greetingStackView)
         view.addSubview(textField)
         
         NSLayoutConstraint.activate([
-            continueButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            continueButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            continueButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
-            continueButton.heightAnchor.constraint(equalToConstant: 56),
+            bottomStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            bottomStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            bottomStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
             
             greetingStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             greetingStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             
             textField.topAnchor.constraint(equalTo: greetingStackView.bottomAnchor, constant: 16),
-            textField.leadingAnchor.constraint(equalTo: continueButton.leadingAnchor),
-            textField.trailingAnchor.constraint(equalTo: continueButton.trailingAnchor),
+            textField.leadingAnchor.constraint(equalTo: greetingStackView.leadingAnchor),
+            textField.trailingAnchor.constraint(equalTo: greetingStackView.trailingAnchor),
         ])
     }
     
     @objc private func continueTapped() {
         pushNext()
     }
+    
+    @objc private func nameChanged() {
+        let name = textField.text?.trimmingCharacters(in: .whitespaces) ?? ""
+        continueButton.isEnabled = !name.isEmpty
+    }
+    
+    @objc private func haveAccountTapped() {
+        let presenter = presentingViewController as? UINavigationController
+        dismiss(animated: true) {
+            presenter?.pushViewController(LoginController(), animated: true)
+        }
+    }
 }
 
 extension OnboardingNameController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
+        if continueButton.isEnabled { continueTapped() }
         return true
     }
 }

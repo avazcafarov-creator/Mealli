@@ -12,6 +12,7 @@ class BaseOnboardingController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupGradientBackground()
+        setupKeyboardDismiss()
     }
     
     func setupGradientBackground() {
@@ -31,5 +32,11 @@ class BaseOnboardingController: UIViewController {
     
     func pushNext() {
         (navigationController as? OnboardingNavigationController)?.pushNextStep()
+    }
+    
+    private func setupKeyboardDismiss() {
+        let tap = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing(_:)))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
     }
 }

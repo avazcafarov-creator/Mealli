@@ -38,15 +38,40 @@ final class AppButton: UIButton {
         configureUI(title: title)
     }
     
-    private func configureUI(title: UIButton.Configuration) {
-        var config = UIButton.Configuration.filled()
-        config.title = title
+    private func configureUI(title: String) {
+        var config: UIButton.Configuration = style == .tertiary ? .plain() : .filled()
+        var attributed = AttributedString(title)
+        if style == .tertiary {
+            attributed.underlineStyle = .single
+        }
+        config.attributedTitle = attributed
         config.cornerStyle = .capsule
         config.baseBackgroundColor = style.background
         config.baseForegroundColor = style.foreground
+        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var outgoing = incoming
+            outgoing.font = AppTextStyle.h3.font
+            return outgoing
+        }
         
         self.configuration = config
+        
+        configurationUpdateHandler = { [weak self] button in
+            guard let self, var config = button.configuration
+            else { return }
+            if !button.isEnabled {
+                config.baseBackgroundColor = self.style == .tertiary ? .clear : .ink3
+                config.baseForegroundColor = .ink2
+            } else {
+                config.baseBackgroundColor = self.style.background
+                config.baseForegroundColor = self.style.foreground
+            }
+            button.configuration = config
+            button.transform = button.isHighlighted ? CGAffineTransform(scaleX: 0.97, y: 0.97) : .identity
+        }
+        
         translatesAutoresizingMaskIntoConstraints = false
+        heightAnchor.constraint(equalToConstant: 52).isActive = true
     }
     
     required init?(coder: NSCoder) {

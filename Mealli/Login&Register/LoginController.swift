@@ -50,87 +50,6 @@ class LoginController: BaseOnboardingController {
         sV.translatesAutoresizingMaskIntoConstraints = false
         return sV
     }()
-    
-    private lazy var appleLoginButton: UIButton = {
-        var config = UIButton.Configuration.plain()
-        config.title = "Apple ilə davam et"
-        config.image = UIImage(systemName: "apple.logo", withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold))
-        config.imagePlacement = .leading
-        config.imagePadding = 8
-        config.baseForegroundColor = .white
-        config.background.backgroundColor = .ink
-        config.cornerStyle = .capsule
-        
-        let aLB = UIButton(configuration: config)
-        aLB.titleLabel?.applyStyle(.body)
-        aLB.heightAnchor.constraint(equalToConstant: 52).isActive = true
-        aLB.translatesAutoresizingMaskIntoConstraints = false
-        return aLB
-    }()
-    
-    private lazy var googleLoginButton: UIButton = {
-        var config = UIButton.Configuration.plain()
-        config.title = "Google ilə davam et"
-        config.image = UIImage(named: "google_logo")
-        config.imagePlacement = .leading
-        config.imagePadding = 8
-        config.background.backgroundColor = .surface
-        config.baseForegroundColor = .ink
-        config.cornerStyle = .capsule
-        config.background.strokeColor = .ink3
-        
-        let gLB = UIButton(configuration: config)
-        gLB.titleLabel?.applyStyle(.body)
-        gLB.heightAnchor.constraint(equalToConstant: 52).isActive = true
-        gLB.translatesAutoresizingMaskIntoConstraints = false
-        return gLB
-    }()
-    
-    private lazy var loginStackView: UIStackView = {
-       let sV = UIStackView(arrangedSubviews: [appleLoginButton, googleLoginButton])
-        sV.axis = .vertical
-        sV.spacing = 8
-        sV.alignment = .fill
-        sV.translatesAutoresizingMaskIntoConstraints = false
-        return sV
-    }()
-    
-    private lazy var dividerView: UIView = {
-        let dv = UIView()
-        dv.backgroundColor = .ink3
-        dv.heightAnchor.constraint(equalToConstant: 1).isActive = true
-        dv.translatesAutoresizingMaskIntoConstraints = false
-        return dv
-    }()
-    
-    private lazy var dividerView2: UIView = {
-        let dv = UIView()
-        dv.backgroundColor = .ink3
-        dv.heightAnchor.constraint(equalToConstant: 1).isActive = true
-        dv.translatesAutoresizingMaskIntoConstraints = false
-        return dv
-    }()
-    
-    private lazy var dividerText: UILabel = {
-        let text = UILabel()
-        text.text = "və ya"
-        text.textAlignment = .center
-        text.applyStyle(.caption)
-        text.textColor = .ink2
-        text.setContentHuggingPriority(.required, for: .horizontal)
-        text.setContentCompressionResistancePriority(.required, for: .horizontal)
-        text.translatesAutoresizingMaskIntoConstraints = false
-        return text
-    }()
-    
-    private lazy var dividerStackView: UIStackView = {
-        let sV = UIStackView(arrangedSubviews: [dividerView, dividerText, dividerView2])
-        sV.axis = .horizontal
-        sV.spacing = 8
-        sV.alignment = .center
-        sV.translatesAutoresizingMaskIntoConstraints = false
-        return sV
-    }()
 
     private lazy var emailField: AppInputField = {
         let field = AppInputField(title: "Email", type: .email)
@@ -181,16 +100,8 @@ class LoginController: BaseOnboardingController {
         return sV
     }()
     
-    private lazy var signInButton: UIButton = {
-        var config = UIButton.Configuration.plain()
-        config.title = "Daxil ol"
-        config.baseForegroundColor = .white
-        config.background.backgroundColor = .brandDeep
-        config.cornerStyle = .capsule
-        
-        let sIB = UIButton(configuration: config)
-        sIB.heightAnchor.constraint(equalToConstant: 52).isActive = true
-        sIB.translatesAutoresizingMaskIntoConstraints = false
+    private lazy var signInButton: AppButton = {
+        let sIB = AppButton(style: .primary, title: "Daxil ol")
         sIB.addTarget(self, action: #selector(signInTapped), for: .touchUpInside)
         return sIB
     }()
@@ -231,6 +142,19 @@ class LoginController: BaseOnboardingController {
         sV.translatesAutoresizingMaskIntoConstraints = false
         return sV
     }()
+    
+    private lazy var loginStackView: UIStackView = {
+       let sV = UIStackView(arrangedSubviews: [appleLoginButton, googleLoginButton])
+        sV.axis = .vertical
+        sV.spacing = 8
+        sV.alignment = .fill
+        sV.translatesAutoresizingMaskIntoConstraints = false
+        return sV
+    }()
+    
+    private let dividerView = OrDividerView()
+    private let appleLoginButton = SocialButton(provider: .apple)
+    private let googleLoginButton = SocialButton(provider: .google)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -242,17 +166,13 @@ class LoginController: BaseOnboardingController {
     
     private func configureUI() {
         view.backgroundColor = .white
-        
-        let tap = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing(_:)))
-        tap.cancelsTouchesInView = false
-        view.addGestureRecognizer(tap)
     }
     
     private func configureConstraints() {
         view.addSubview(backButton)
         view.addSubview(greetingStackView)
         view.addSubview(loginStackView)
-        view.addSubview(dividerStackView)
+        view.addSubview(dividerView)
         view.addSubview(formStackView)
         view.addSubview(bottomStackView)
         
@@ -267,12 +187,11 @@ class LoginController: BaseOnboardingController {
             loginStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             loginStackView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.88),
             
-            dividerStackView.topAnchor.constraint(equalTo: loginStackView.bottomAnchor, constant: 16),
-            dividerStackView.leadingAnchor.constraint(equalTo: loginStackView.leadingAnchor),
-            dividerStackView.trailingAnchor.constraint(equalTo: loginStackView.trailingAnchor),
-            dividerView.widthAnchor.constraint(equalTo: dividerView2.widthAnchor),
+            dividerView.topAnchor.constraint(equalTo: loginStackView.bottomAnchor, constant: 16),
+            dividerView.leadingAnchor.constraint(equalTo: loginStackView.leadingAnchor),
+            dividerView.trailingAnchor.constraint(equalTo: loginStackView.trailingAnchor),
             
-            formStackView.topAnchor.constraint(equalTo: dividerStackView.bottomAnchor, constant: 16),
+            formStackView.topAnchor.constraint(equalTo: dividerView.bottomAnchor, constant: 16),
             formStackView.leadingAnchor.constraint(equalTo: loginStackView.leadingAnchor),
             formStackView.trailingAnchor.constraint(equalTo: loginStackView.trailingAnchor),
             
@@ -285,10 +204,10 @@ class LoginController: BaseOnboardingController {
     }
 
     @objc private func signInTapped() {
+        view.endEditing(true)
         let emailOK = emailField.validate()
         let passwordOK = passwordField.validate()
         guard emailOK, passwordOK else { return }
-        view.endEditing(true)
     }
     
     @objc private func startButtonTapped() {
