@@ -7,34 +7,13 @@
 
 import UIKit
 
-class OnboardingNameController: BaseOnboardingController, OnboardingStep {
+class OnboardingNameController: OnboardingStepController {
     var stepTitle: String { "Adın" }
     
     private let headerView = ScreenHeaderView(
         title: "Salam! Adın nədir?",
         subtitle: "Sənə necə müraciət edim?"
     )
-    
-    private lazy var continueButton: AppButton = {
-        let cB = AppButton(style: .primary, title: "Davam et")
-        cB.addTarget(self, action: #selector(continueTapped), for: .touchUpInside)
-        return cB
-    }()
-    
-    private lazy var haveAccountButton: AppButton = {
-        let button = AppButton(style: .tertiary, title: "Artıq hesabım var")
-        button.addTarget(self, action: #selector(haveAccountTapped), for: .touchUpInside)
-        return button
-    }()
-    
-    private lazy var bottomStackView: UIStackView = {
-        let sV = UIStackView(arrangedSubviews: [continueButton, haveAccountButton])
-        sV.axis = .vertical
-        sV.spacing = 4
-        sV.alignment = .fill
-        sV.translatesAutoresizingMaskIntoConstraints = false
-        return sV
-    }()
     
     private lazy var textField: AppTextField = {
         let tF = AppTextField(type: .name)
@@ -75,20 +54,9 @@ class OnboardingNameController: BaseOnboardingController, OnboardingStep {
         ])
     }
     
-    @objc private func continueTapped() {
-        pushNext()
-    }
-    
     @objc private func nameChanged() {
         let name = textField.text?.trimmingCharacters(in: .whitespaces) ?? ""
         continueButton.isEnabled = !name.isEmpty
-    }
-    
-    @objc private func haveAccountTapped() {
-        let presenter = presentingViewController as? UINavigationController
-        dismiss(animated: true) {
-            presenter?.pushViewController(LoginController(), animated: true)
-        }
     }
 }
 
