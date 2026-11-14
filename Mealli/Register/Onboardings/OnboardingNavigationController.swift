@@ -9,6 +9,7 @@ import UIKit
 
 final class OnboardingNavigationController: UINavigationController {
     private let header = OnboardingNavigationView()
+    let data = OnboardingData()
 
     override func viewDidLoad() {
         super.viewDidLoad()

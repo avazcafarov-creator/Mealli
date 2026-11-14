@@ -12,8 +12,11 @@ class OnboardingStepController: BaseOnboardingController , OnboardingStep {
     var headerTitle: String { "" }
     var headerSubtitle: String? { nil }
     var showsHaveAccountButton: Bool { false }
+    var onboardingData: OnboardingData? {
+        (navigationController as? OnboardingNavigationController)?.data
+    }
     
-    private lazy var continueButton: AppButton = {
+    private(set) lazy var continueButton: AppButton = {
         let cB = AppButton(style: .primary, title: "Davam et")
         cB.addTarget(self, action: #selector(continueTapped), for: .touchUpInside)
         return cB
@@ -42,6 +45,7 @@ class OnboardingStepController: BaseOnboardingController , OnboardingStep {
         super.viewDidLoad()
         haveAccountButton.isHidden = !showsHaveAccountButton
         configureConstraints()
+        setupContent()
     }
     
     private func configureConstraints() {
@@ -49,13 +53,25 @@ class OnboardingStepController: BaseOnboardingController , OnboardingStep {
         view.addSubview(contentView)
         view.addSubview(bottomStackView)
         NSLayoutConstraint.activate([
-            headerView.topAnchor.constraint(equalTo: view.topAnchor),
+            headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             headerView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.88),
             headerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             contentView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 24),
-            contentView.leadingAnchor.constraint(equalTo: <#T##NSLayoutAnchor<NSLayoutXAxisAnchor>#>)
+            contentView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: headerView.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: bottomStackView.topAnchor, constant: -16),
+            
+            bottomStackView.leadingAnchor.constraint(equalTo: headerView.leadingAnchor),
+            bottomStackView.trailingAnchor.constraint(equalTo: headerView.trailingAnchor),
+            bottomStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
         ])
+        
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    func setupContent() {
+        
     }
     
     @objc func continueTapped() {
@@ -67,9 +83,5 @@ class OnboardingStepController: BaseOnboardingController , OnboardingStep {
         dismiss(animated: true) {
             presenter?.pushViewController(LoginController(), animated: true)
         }
-    }
-    
-    @MainActor required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
