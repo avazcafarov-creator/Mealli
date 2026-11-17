@@ -70,9 +70,7 @@ class OnboardingStepController: BaseOnboardingController , OnboardingStep {
         contentView.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    func setupContent() {
-        
-    }
+    func setupContent() {}
     
     @objc func continueTapped() {
         pushNext()
@@ -84,4 +82,6 @@ class OnboardingStepController: BaseOnboardingController , OnboardingStep {
             presenter?.pushViewController(LoginController(), animated: true)
         }
     }
+    
+    func handleBack() -> Bool { false }
 }

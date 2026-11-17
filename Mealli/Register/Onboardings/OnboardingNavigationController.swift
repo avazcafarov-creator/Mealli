@@ -31,6 +31,7 @@ final class OnboardingNavigationController: UINavigationController {
         
         header.onBack = { [weak self] in
             guard let self else { return }
+            if let step = topViewController as? OnboardingStepController, step.handleBack() { return }
             if viewControllers.count > 1 {
                 popViewController(animated: true)
             } else {

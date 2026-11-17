@@ -13,6 +13,8 @@ final class OnboardingData {
     var name: String?
     var age: Int?
     var gender: Gender?
+    var height: Int?
+    var weight: Int?
 }
 
 

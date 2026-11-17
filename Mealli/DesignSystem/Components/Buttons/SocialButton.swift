@@ -20,7 +20,8 @@ final class SocialButton: UIButton {
         
         var image: UIImage? {
             switch self {
-            case .apple: return UIImage(systemName: "apple.logo", withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold))
+            case .apple: return UIImage(systemName: "apple.logo",
+                                        withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold))
             case .google: return UIImage(named: "google_logo")
             }
         }
