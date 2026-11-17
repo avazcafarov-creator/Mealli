@@ -108,11 +108,21 @@ class OnboardingAboutController: OnboardingStepController {
     
     override func setupContent() {
         contentView.addSubview(ageGenderStack)
+        contentView.addSubview(heightStack)
+        contentView.addSubview(weightStack)
         
         NSLayoutConstraint.activate([
             ageGenderStack.topAnchor.constraint(equalTo: contentView.topAnchor),
             ageGenderStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            ageGenderStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+            ageGenderStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            
+            heightStack.topAnchor.constraint(equalTo: contentView.topAnchor),
+            heightStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            heightStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            
+            weightStack.topAnchor.constraint(equalTo: contentView.topAnchor),
+            weightStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            weightStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
         ])
         
         agePicker.dataSource = self
