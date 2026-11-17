@@ -10,7 +10,7 @@ import UIKit
 class OnboardingNameController: OnboardingStepController {
     override var stepTitle: String { "Ad" }
     override var headerTitle: String { "Salam! Adın nədir?" }
-    override var headerSubtitle: String? { "Sənə necə müraciət edim?" }
+    override var headerSubtitle: String? { "Sənə necə müraciət edək?" }
     override var showsHaveAccountButton: Bool { true }
     
     private lazy var textField: AppTextField = {

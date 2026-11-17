@@ -11,6 +11,6 @@ import UIKit
 enum OnboardingFlow {
     static let screens: [() -> UIViewController] = [
         { OnboardingNameController() },
-        { OnboardingAgeController() }
+        { OnboardingAboutController() }
     ]
 }

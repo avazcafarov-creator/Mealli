@@ -50,8 +50,7 @@ final class AppInputField: UIView {
     }
     
     private func configureUI() {
-        titleLabel.font = .systemFont(ofSize: 14, weight: .semibold)
-        titleLabel.textColor = .ink
+        titleLabel.applyStyle(.label)
         
         textField.addTarget(self, action: #selector(editingChanged), for: .editingChanged)
         textField.addTarget(self, action: #selector(editingEnded), for: .editingDidEnd)

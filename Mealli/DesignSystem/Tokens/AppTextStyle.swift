@@ -17,6 +17,7 @@ enum AppTextStyle {
     case secondary
     case caption
     case listNumber
+    case label
     
     var font: UIFont {
         switch self {
@@ -36,6 +37,8 @@ enum AppTextStyle {
             return .systemFont(ofSize: 12, weight: .regular)
         case .listNumber:
             return .systemFont(ofSize: 16, weight: .semibold)
+        case .label:
+            return .systemFont(ofSize: 14, weight: .semibold)
         }
     }
     

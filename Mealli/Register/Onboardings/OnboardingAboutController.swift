@@ -1,5 +1,5 @@
 //
-//  OnboardingAgeController.swift
+//  OnboardingAboutController.swift
 //  Mealli
 //
 //  Created by Avaz Cafarov on 03.11.26.
@@ -9,6 +9,7 @@ import UIKit
 
 class OnboardingAboutController: OnboardingStepController {
     override var stepTitle: String { "Haqqında" }
+    
     override var headerTitle: String {
         if let name = onboardingData?.name, !name.isEmpty {
             return "\(name), bir az özündən danış"
@@ -20,16 +21,15 @@ class OnboardingAboutController: OnboardingStepController {
         "Bunu porsiyanı və kalori ehtiyacını hesablamaq üçün soruşuruq. Heç kimlə paylaşmırıq."
     }
     
-    private func makeSectionLabel(_ text: String) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.font = .systemFont(ofSize: 16, weight: .semibold)
-        label.textColor = .ink
-        return label
-    }
+    private let ages = Array(14...90)
+    private let defaultAge = 25
     
-    private lazy var ageLabel = makeSectionLabel("Yaş")
-    private lazy var genderLabel = makeSectionLabel("Cins")
+    private lazy var ageLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Yaş"
+        label.applyStyle(.label)
+        return label
+    }()
     
     private lazy var agePicker: UIPickerView = {
         let picker = UIPickerView()
@@ -37,22 +37,65 @@ class OnboardingAboutController: OnboardingStepController {
         return picker
     }()
     
-    private lazy var genderControl: UISegmentedControl = {
-        let control = UISegmentedControl(items: ["Qadın", "Kişi", "Demək istəmirəm"])
-        control.selectedSegmentIndex = 0
-        control.selectedSegmentTintColor = .brandLime
-        control.backgroundColor = .surface
-        control.setTitleTextAttributes([.foregroundColor: UIColor.ink2], for: .normal)
-        control.heightAnchor.constraint(equalToConstant: 44).isActive = true
-        return control
+    private lazy var genderLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Cins"
+        label.applyStyle(.label)
+        return label
     }()
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    
+    private let genderControl = AppSegmentedControl(items: ["Qadın", "Kişi", "Demək istəmirəm"])
+    
+    private lazy var ageGenderStack: UIStackView = {
+        let sV = UIStackView(arrangedSubviews: [ageLabel, agePicker, genderLabel, genderControl])
+        sV.axis = .vertical
+        sV.spacing = 8
+        sV.setCustomSpacing(24, after: agePicker)
+        sV.translatesAutoresizingMaskIntoConstraints = false
+        return sV
+    }()
+    
+    override func setupContent() {
+        contentView.addSubview(ageGenderStack)
+        NSLayoutConstraint.activate([
+            ageGenderStack.topAnchor.constraint(equalTo: contentView.topAnchor),
+            ageGenderStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            ageGenderStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
+        ])
+        
+        agePicker.dataSource = self
+        agePicker.delegate = self
+        
+        if let index = ages.firstIndex(of: defaultAge) {
+            agePicker.selectRow(index, inComponent: 0, animated: false)
+        }
     }
     
+    override func continueTapped() {
+        onboardingData?.age = ages[agePicker.selectedRow(inComponent: 0)]
+        onboardingData?.gender = selectedGender()
+        super.continueTapped()
+    }
     
-    @MainActor required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    private func selectedGender() -> OnboardingData.Gender {
+        switch genderControl.selectedSegmentIndex {
+        case 0: return .female
+        case 1: return .male
+        default: return .unspecified
+        }
+    }
+}
+
+extension OnboardingAboutController: UIPickerViewDataSource, UIPickerViewDelegate {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        ages.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        "\(ages[row])"
     }
 }
